@@ -1,0 +1,78 @@
+/* ========== General Layout ========== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f8f8f8;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h1, h2 {
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* ========== Slider Section ========== */
+.slider-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.slider-section label {
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.slider-section input[type="range"] {
+  width: 200px;
+  margin: 10px;
+}
+
+.ratio-display {
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+
+button {
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+/* ========== Chart Grid ========== */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: auto;
+  gap: 20px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 400px;
+}
+
+.note {
+  text-align: center;
+  font-style: italic;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+  .chart-container {
+    height: 300px;
+  }
+}
