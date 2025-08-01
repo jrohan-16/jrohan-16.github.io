@@ -23,3 +23,15 @@ pytest
 
 The tests are located in `tests/test_capital_engine.py` and exercise the
 `capital_engine` package defined in `capital_engine/__init__.py`.
+
+## Preparing for Pyodide
+
+Use `scripts/export_pyodide.py` to copy the canonical `capital_engine` source
+into `src/lib/model.py` for use with Pyodide:
+
+```bash
+python scripts/export_pyodide.py
+```
+
+This script imports the package and writes its source to the destination so
+there is only one authoritative implementation of the model.
