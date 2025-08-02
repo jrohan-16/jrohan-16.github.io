@@ -9,6 +9,7 @@ def main():
     dest = Path('src/lib/model.py')
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(src)
+    print(f"Wrote {dest}")
 
 
 if __name__ == '__main__':

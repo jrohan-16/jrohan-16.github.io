@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 import numpy as np
 from typing import Dict, Tuple, Iterable
@@ -83,3 +84,34 @@ def compare(
     """Return delta of ``metrics`` between scenario and base results."""
     delta = scen[metrics] - base[metrics]
     return delta, scen
+
+
+def run():
+    """Return a sample capital calculation as a JSON serialisable object."""
+    data = {
+        "period": ["24Q4", "25Q1", "25Q2"],
+        "pre_tax_income": [2.029, 2.067, 2.226],
+        "provision": [0.156, 0.219, 0.254],
+        "net_charge_offs": [0.120, 0.140, 0.150],
+        "tax_rate": [0.18, 0.18, 0.18],
+        "rwa": [416, 420, 425],
+        "div_per_share": [1.60, 1.60, 1.60],
+        "shares_start": [398, None, None],
+        "buyback_dollars": [0.20, 0.20, 0.30],
+        "buyback_price": [140, 140, 140],
+        "equity_dollars": [0, 0, 0],
+        "equity_price": [140, 140, 140],
+        "at1_issue": [0, 0, 0],
+        "at1_redm": [0, 0, 0],
+        "cet1_start": [44.0, None, None],
+        "at1_start": [5.1, None, None],
+        "acl_start": [6.0, None, None],
+        "sub_principal_start": [7.0, None, None],
+        "sub_years_start": [6.0, None, None],
+        "sub_issue": [0, 0, 0],
+        "sub_issue_maturity": [10, 10, 10],
+        "sub_redemption": [0, 0, 0],
+    }
+    df = pd.DataFrame(data).set_index("period")
+    df = recalc(df)
+    return json.loads(df.to_json(orient="table"))
