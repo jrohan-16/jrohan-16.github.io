@@ -30,8 +30,10 @@ The tests are located in `tests/test_capital_engine.py` and exercise the
 
 ## Preparing for Pyodide
 
-Use `scripts/export_pyodide.py` to copy the canonical `capital_engine` source
-into `src/lib/model.py` for use with Pyodide:
+The build process automatically runs `scripts/export_pyodide.py` to copy the
+canonical `capital_engine` source into `src/lib/model.py` for use with
+Pyodide. The generated file is ignored by Git and kept in sync whenever
+`npm run build` is executed. If you need to refresh it manually, run:
 
 ```bash
 python scripts/export_pyodide.py
