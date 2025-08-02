@@ -3,6 +3,7 @@ node_modules/
 __pycache__/
 *.pyc
 venv/
+src/lib/model.py
 
 # Output
 .output
