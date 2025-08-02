@@ -32,8 +32,10 @@ The tests are located in `tests/test_capital_engine.py` and exercise the
 
 The build process automatically runs `scripts/export_pyodide.py` to copy the
 canonical `capital_engine` source into `src/lib/model.py` for use with
-Pyodide. The generated file is ignored by Git and kept in sync whenever
-`npm run build` is executed. If you need to refresh it manually, run:
+Pyodide. This generated file must exist for the frontend to function; if it is
+missing the client will fail to fetch the model. The file is ignored by Git and
+kept in sync whenever `npm run build` or `npm run dev` is executed. If you need
+to refresh it manually, run:
 
 ```bash
 python scripts/export_pyodide.py
