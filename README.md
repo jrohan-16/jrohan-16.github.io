@@ -7,11 +7,15 @@ structured.
 
 ## Installation
 
-Create a virtual environment (optional) and install the dependencies:
+Create a virtual environment (optional) and install the package in editable
+mode for development:
 
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
+
+This installs ``capital_engine`` along with its Python dependencies so that
+changes to the source are immediately reflected.
 
 ## Running the tests
 
