@@ -35,3 +35,14 @@ python scripts/export_pyodide.py
 
 This script imports the package and writes its source to the destination so
 there is only one authoritative implementation of the model.
+
+## Node setup
+
+Install Node dependencies and build the static site:
+
+```bash
+npm install
+npm run build
+```
+
+This will create the compiled web assets in the `docs/` directory. During development you can run `npm run dev` to start a local server that reloads on changes.
