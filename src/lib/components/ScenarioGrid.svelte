@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { runModel } from '$lib/api';
-  let data = [], columns = [];
+  let data: Record<string, any>[] = [];
+  let columns: { accessorKey: string }[] = [];
   onMount(async () => {
-    const json = await runModel();
+    const json: { data: Record<string, any>[]; schema: { fields: { name: string }[] } } = await runModel();
     data = json.data;
-    columns = json.schema.fields.map(f => ({ accessorKey: f.name }));
+    columns = json.schema.fields.map((f: { name: string }) => ({ accessorKey: f.name }));
   });
 </script>
 
