@@ -2,7 +2,7 @@ import type { Table } from './engine';
 import { recalc } from './engine';
 
 // Base scenario table (sample data) used for the dashboard
-const baseScenario: Table = [
+export const baseScenario: Table = [
   {
     sharesStart: 398.0,
     cet1Start: 591.56,
