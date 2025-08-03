@@ -1,4 +1,3 @@
-https://github.com/jrohan-16/jrohan-16.github.io/new/main/src/routes/input
 <script lang="ts">
   import { onMount } from 'svelte';
   import { baseScenario } from '$lib/api';
@@ -28,7 +27,7 @@ https://github.com/jrohan-16/jrohan-16.github.io/new/main/src/routes/input
   }
 
   function updateResults() {
-    const result = recalc(scenario as any);
+    const result = recalc(scenario);
     const { rows, cols } = pivotData(result as any[]);
     data = rows;
     columns = cols;
