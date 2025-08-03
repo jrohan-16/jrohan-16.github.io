@@ -24,3 +24,11 @@ The output will be generated in the `docs` directory. A GitHub Actions workflow 
 ## Core engine
 
 The capital forecasting logic is implemented in TypeScript in `src/lib/engine.ts`. A simple API wrapper in `src/lib/api.ts` exposes a `runModel()` function that calls the engine with a base scenario and returns table data and schema for the front-end.
+
+
+## Features
+
+- Global navigation bar visible on all pages for easy access to Dashboard, Input, Compare and Export views.
+- Scenario tables pivoted so that financial metrics are rows and quarters are columns for better readability.
+- Interactive Input page allowing you to adjust key assumptions (pre-tax income, provision, tax rate) and see immediate results.
+- Export functionality to download scenario results as a CSV.
