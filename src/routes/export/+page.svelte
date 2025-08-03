@@ -1,28 +1,29 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import { runModel } from '$lib/api';
+import { baseScenario } from '$lib/api'; 
+import { recalc } from '$lib/engine';
 import DataTable from '$lib/components/DataTable.svelte';
 
 let data: any[] = [];
 let columns: { accessorKey: string }[] = [];
 
-onMount(async () => {
-  const result = await runModel();
-  data = result.data;
-  columns = result.schema.fields.map((f: any) => ({ accessorKey: f.name }));
+onMount(() => {
+    const result = recalc(baseScenario as any);
+    data = result as any[];
+    columns = Object.keys(data[0] ?? {}).map((name) => ({ accessorKey: name }));
 });
 
 function downloadCSV() {
-  const header = columns.map(c => c.accessorKey).join(',');
-  const rows = data.map(row => columns.map(c => row[c.accessorKey]).join(','));
-  const csv = [header, ...rows].join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'scenario.csv';
-  a.click();
-  URL.revokeObjectURL(url);
+    const header = columns.map((c) => c.accessorKey).join(',');
+    const rows = data.map((row) => columns.map((c) => row[c.accessorKey]).join(','));
+    const csv = [header, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'scenario.csv';
+    a.click();
+    URL.revokeObjectURL(url);
 }
 </script>
 
