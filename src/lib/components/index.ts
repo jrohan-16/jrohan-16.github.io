@@ -1,3 +1,3 @@
-import ScenarioGrid from './ScenarioGrid.svelte';
-export { ScenarioGrid };
-export default ScenarioGrid;
+import DataTable from './DataTable.svelte';
+export { DataTable };
+export default DataTable;
