@@ -25,7 +25,7 @@ export const baseScenario: Table = [
     subRedemption: 0,
     at1Issue: 0,
     at1Redm: 0,
-    period: '24Q4' as any
+    period: '24Q4'
   },
   {
     sharesStart: 398.0,
@@ -49,7 +49,7 @@ export const baseScenario: Table = [
     subRedemption: 0,
     at1Issue: 0,
     at1Redm: 0,
-    period: '25Q1' as any
+    period: '25Q1'
   },
   {
     sharesStart: 398.0,
@@ -73,7 +73,7 @@ export const baseScenario: Table = [
     subRedemption: 0,
     at1Issue: 0,
     at1Redm: 0,
-    period: '25Q2' as any
+    period: '25Q2'
   }
 ];
 
@@ -81,7 +81,7 @@ export const baseScenario: Table = [
  * Execute the capital engine on the base scenario and return data with a schema.
  */
 export async function runModel(): Promise<{ data: any[]; schema: { fields: { name: string }[] } }> {
-  const result = recalc(baseScenario as any);
+  const result = recalc(baseScenario);
   const fields = Object.keys(result[0] ?? {}).map((name) => ({ name }));
   return { data: result as any[], schema: { fields } };
 }

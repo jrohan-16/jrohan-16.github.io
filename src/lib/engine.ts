@@ -13,6 +13,8 @@ export const SUB_FULL_CREDIT_YEARS = 5.0;   // sub‑debt full credit ≥5 yrs
 
 ////////////// ─── type definitions ─────────────────
 export interface PeriodInput {
+  // descriptive period label (e.g. '24Q4')
+  period: string;
   // starting balances (first row supplied; later rows filled by engine)
   sharesStart: number;
   cet1Start: number;
