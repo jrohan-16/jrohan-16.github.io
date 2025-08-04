@@ -1,3 +1,5 @@
 import DataTable from './DataTable.svelte';
-export { DataTable };
+import Nav from './Nav.svelte';
+
+export { DataTable, Nav };
 export default DataTable;
