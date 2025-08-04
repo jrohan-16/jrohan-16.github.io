@@ -30,5 +30,6 @@
 
 <div class="p-6 bg-white">
   <h1 class="text-xl font-bold mb-4">Dashboard</h1>
+  <p class="text-sm text-gray-600 mb-4">All amounts in $ billions.</p>
   <DataTable {data} {columns} />
 </div>
