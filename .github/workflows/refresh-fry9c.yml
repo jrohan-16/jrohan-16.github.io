@@ -13,18 +13,16 @@ on:
 
 jobs:
   refresh:
-     runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          persist-credentials: true
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Run refresh script
         run: node scripts/refresh-fry9c.cjs
       - name: Commit and push changes
@@ -32,13 +30,5 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add static/data
-          git commit -m "Update FRY9C data" || true
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git push origin HEAD:${{ github.ref }}
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add static/data
-          git commit -m "Update FRY9C data" || true
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git push origin HEAD:${{ github.ref }}
+          git commit -m "Update FRY9C data" || echo "No changes to commit"
+          git push
