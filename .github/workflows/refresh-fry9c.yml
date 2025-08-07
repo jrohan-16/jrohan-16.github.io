@@ -2,10 +2,10 @@ name: Refresh FRY9C Data
 
 on:
   schedule:
-    - cron: '0 0 15 5 *'  # May 15 (45 days after Q1 end)
-    - cron: '0 0 14 8 *'  # Aug 14 (45 days after Q2 end)
-    - cron: '0 0 14 11 *' # Nov 14 (45 days after Q3 end)
-    - cron: '0 0 14 2 *'  # Feb 14 (45 days after Q4 end)
+    - cron: '0 0 15 5 *'   # May 15 (45 days after Q1 end)
+    - cron: '0 0 14 8 *'   # Aug 14 (45 days after Q2 end)
+    - cron: '0 0 14 11 *'  # Nov 14 (45 days after Q3 end)
+    - cron: '0 0 14 2 *'   # Feb 14 (45 days after Q4 end)
   workflow_dispatch:
 
 jobs:
@@ -23,17 +23,11 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run refresh script
-        run: node scripts/refresh-fry9c.js
+        run: node scripts/refresh-fry9c.cjs
       - name: Commit and push changes
         run: |
           git config user.name 'github-actions'
           git config user.email 'github-actions@github.com'
-          git add static/data/*.json
-          if git diff --cached --quiet; then
-            echo "No changes detected"
-          else
-            git commit -m "chore: update FRY9C data"
-            git push origin HEAD:main
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git add static/data
+          git commit -m "Update FRY9C data" || echo "No changes"
+          git push
