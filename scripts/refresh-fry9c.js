@@ -37,13 +37,17 @@ const fs = require('fs');
 const { URL } = require('url');
 
 // List of institutions to fetch.  Add additional RSSD IDs as needed.
-const RSSD_IDS = [
+conts RSSD_IDS = [
   {
     id: '1069778',
     slug: 'pnc',
     name: 'PNC Financial Services Group, Inc.'
+  },
+  {
+    id: '1039502',
+    slug: 'jpm',
+    name: 'JPMorgan Chase & Co.'
   }
-  // Add more objects like { id: '123456', slug: 'other', name: 'Other Bank' }
 ];
 
 // Map our internal field names to FR Y‑9C variable codes.  See the MDRM or
