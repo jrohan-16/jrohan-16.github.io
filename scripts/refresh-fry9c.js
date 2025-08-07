@@ -37,8 +37,8 @@ const fs = require('fs');
 const { URL } = require('url');
 
 // List of institutions to fetch.  Add additional RSSD IDs as needed.
-conts RSSD_IDS = [
-  {
+const RSSD_IDS = [
+{
     id: '1069778',
     slug: 'pnc',
     name: 'PNC Financial Services Group, Inc.'
@@ -49,6 +49,40 @@ conts RSSD_IDS = [
     name: 'JPMorgan Chase & Co.'
   }
 ];
+48
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+;
 
 // Map our internal field names to FR Y‑9C variable codes.  See the MDRM or
 // Chicago Fed documentation for a comprehensive list of variable codes.  These
