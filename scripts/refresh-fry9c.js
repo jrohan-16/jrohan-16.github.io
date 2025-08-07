@@ -15,12 +15,12 @@
  *    time of writing, a URL of the form shown below will return a CSV file:
  *
  *      https://www.ffiec.gov/npw/FinancialReport/ReturnFinancialReportCSV?
- *          id_rssd=1069778&report=FRY9C&as_of_date=20250630
+ *          dt=20250630&id=1069778&rpt=FRY9C
  *
  *    Where:
- *      id_rssd    – the institution’s RSSD identifier (e.g. 1069778 for PNC)
- *      report     – the report type (“FRY9C”)
- *      as_of_date – the quarter end date in YYYYMMDD format
+ *      dt  – the quarter end date in YYYYMMDD format
+ *      id  – the institution’s RSSD identifier (e.g. 1069778 for PNC)
+ *      rpt – the report type (“FRY9C”)
  *
  *    If the API ever changes, update the BASE_URL and query parameters below.
  *  - FR Y‑9C amounts are reported in thousands of dollars.  The script
@@ -149,9 +149,9 @@ function getQuarterEndDates(numQuarters = 4) {
  */
 async function fetchQuarterData(rssdId, quarterEnd) {
   const url = new URL(BASE_URL);
-  url.searchParams.set('id_rssd', rssdId);
-  url.searchParams.set('report', 'FRY9C');
-  url.searchParams.set('as_of_date', quarterEnd);
+  url.searchParams.set('id', rssdId);
+  url.searchParams.set('rpt', 'FRY9C');
+  url.searchParams.set('dt', quarterEnd);
   const res = await fetch(url.toString());
   if (!res.ok) {
     throw new Error(`Failed to download data for ${rssdId} ${quarterEnd}: ${res.status} ${res.statusText}`);
