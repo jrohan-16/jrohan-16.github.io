@@ -1,5 +1,8 @@
 name: Refresh FRY9C Data
 
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: '0 0 15 5 *'   # May 15 (45 days after Q1 end)
