@@ -5,6 +5,7 @@
   import DataTable from "$lib/components/DataTable.svelte";
 
   type PeriodRow = (typeof baseScenario)[number];
+  type EditableField = { key: keyof PeriodRow | "ni"; label: string };
 
   // Clone base scenario so user inputs don't mutate original constant
   let scenario: PeriodRow[] = JSON.parse(
@@ -12,22 +13,44 @@
   ) as PeriodRow[];
   const baseResult = recalc(baseScenario);
 
-  const editableFields: { key: keyof PeriodRow; label: string }[] = [
-    { key: "preTaxIncome", label: "Pre-Tax Income" },
+  const defaultFields: EditableField[] = [
     { key: "provision", label: "Provision" },
-    { key: "taxRate", label: "Tax Rate" },
-    { key: "buybackDollars", label: "Buyback $" },
-    { key: "buybackPrice", label: "Buyback Price" },
-    { key: "equityDollars", label: "Equity $" },
-    { key: "equityPrice", label: "Equity Price" },
+    { key: "preTaxIncome", label: "Pre-Tax Income" },
+    { key: "ni", label: "Net Income" },
+    { key: "buybackDollars", label: "Share Repurchases" },
     { key: "divPerShare", label: "Div / Share" },
-    { key: "netChargeOffs", label: "Net Charge-Offs" },
     { key: "rwa", label: "RWA" },
   ];
+
+  let editableFields: EditableField[] = [...defaultFields];
+  let fieldToAdd = "";
 
   const defaultMetrics = ["provision", "ni", "cet1Ratio", "rwa"];
   let selectedMetrics: string[] = [...defaultMetrics];
   let metricToAdd = "";
+
+  function fieldLabel(key: string) {
+    if (key === "ni") return "Net Income";
+    return key
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (s) => s.toUpperCase());
+  }
+
+  function availableInputFields() {
+    const all = Object.keys(baseScenario[0] ?? {}).filter((n) => n !== "period");
+    all.push("ni");
+    return all.filter((m) => !editableFields.some((f) => f.key === m));
+  }
+
+  function addField() {
+    if (fieldToAdd) {
+      editableFields = [
+        ...editableFields,
+        { key: fieldToAdd as any, label: fieldLabel(fieldToAdd) },
+      ];
+      fieldToAdd = "";
+    }
+  }
 
   let data: any[] = [];
   let columns: { accessorKey: string }[] = [];
@@ -86,13 +109,16 @@
     updateResults();
   }
 
-  function handleInput(row: PeriodRow, key: keyof PeriodRow, e: Event) {
+  function handleInput(idx: number, key: EditableField["key"], e: Event) {
     const target = e.target as HTMLInputElement;
     const value = parseFloat(target.value);
+    const row = scenario[idx];
     if (key === "provision") {
       const preProvision = row.preTaxIncome + row.provision;
       row.provision = value;
       row.preTaxIncome = preProvision - value;
+    } else if (key === "ni") {
+      row.preTaxIncome = row.provision + value / (1 - row.taxRate);
     } else {
       (row as any)[key] = value;
     }
@@ -119,6 +145,12 @@
     updateResults();
   }
 
+  function resetScenario() {
+    scenario = JSON.parse(JSON.stringify(baseScenario)) as PeriodRow[];
+    editableFields = [...defaultFields];
+    updateResults();
+  }
+
   onMount(() => {
     updateResults();
   });
@@ -130,19 +162,23 @@
     <table class="min-w-full border border-gray-300">
       <thead class="bg-gray-100">
         <tr>
-          <th class="px-2 py-1 border-b">Period</th>
-          {#each editableFields as f}
-            <th class="px-2 py-1 border-b">{f.label}</th>
+          <th class="px-2 py-1 border-b">Metric</th>
+          {#each scenario as row}
+            <th class="px-2 py-1 border-b">{row.period}</th>
           {/each}
         </tr>
       </thead>
       <tbody>
-        {#each scenario as row, idx}
+        {#each editableFields as f}
           <tr class="border-b">
-            <td class="px-2 py-1">{row.period}</td>
-            {#each editableFields as f}
-              {@const baseVal = Number(baseScenario[idx][f.key])}
-              {@const currVal = Number((row as any)[f.key])}
+            <td class="px-2 py-1">{f.label}</td>
+            {#each scenario as row, idx}
+              {@const baseVal = f.key === 'ni'
+                ? Number(baseResult[idx].ni)
+                : Number(baseScenario[idx][f.key as keyof PeriodRow])}
+              {@const currVal = f.key === 'ni'
+                ? (row.preTaxIncome - row.provision) * (1 - row.taxRate)
+                : Number((row as any)[f.key])}
               <td class="px-2 py-1 align-top">
                 <input
                   type="number"
@@ -151,13 +187,8 @@
                     : ''}"
                   value={currVal}
                   step="0.001"
-                  on:input={(e) => handleInput(row, f.key, e)}
+                  on:input={(e) => handleInput(idx, f.key, e)}
                 />
-                {#if currVal !== baseVal}
-                  <div class="text-xs text-blue-600">
-                    Δ {(currVal - baseVal).toFixed(2)}
-                  </div>
-                {/if}
               </td>
             {/each}
           </tr>
@@ -165,10 +196,33 @@
       </tbody>
     </table>
   </div>
-  <button
-    class="mb-6 px-3 py-1 bg-blue-500 text-white rounded"
-    on:click={addPeriod}>Add Period</button
-  >
+
+  <div class="mb-4 flex items-center gap-2">
+    <select bind:value={fieldToAdd} class="border rounded px-2 py-1">
+      <option value="" disabled selected>Add field...</option>
+      {#each availableInputFields() as f}
+        <option value={f}>{fieldLabel(f)}</option>
+      {/each}
+    </select>
+    <button
+      class="px-2 py-1 bg-green-500 text-white rounded"
+      on:click={addField}
+      disabled={!fieldToAdd}
+    >
+      Add
+    </button>
+  </div>
+
+  <div class="mb-6 flex gap-2">
+    <button
+      class="px-3 py-1 bg-blue-500 text-white rounded"
+      on:click={addPeriod}>Add Period</button
+    >
+    <button
+      class="px-3 py-1 bg-gray-300 rounded"
+      on:click={resetScenario}>Reset</button
+    >
+  </div>
 
   <div class="mb-4 flex items-center gap-2">
     <select bind:value={metricToAdd} class="border rounded px-2 py-1">
@@ -187,16 +241,14 @@
   </div>
 
   <div class="mb-4 flex flex-wrap gap-2">
-    {#each selectedMetrics as m}
+    {#each selectedMetrics.filter((m) => !defaultMetrics.includes(m)) as m}
       <span
         class="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center"
       >
         {m}
-        {#if !defaultMetrics.includes(m)}
-          <button class="ml-1 text-red-500" on:click={() => removeMetric(m)}
-            >×</button
-          >
-        {/if}
+        <button class="ml-1 text-red-500" on:click={() => removeMetric(m)}
+          >×</button
+        >
       </span>
     {/each}
   </div>
