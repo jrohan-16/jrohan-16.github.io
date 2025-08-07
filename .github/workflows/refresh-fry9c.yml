@@ -5,21 +5,20 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 0 15 5 *'   # May 15 (45 days after Q1 end)
-    - cron: '0 0 14 8 *'   # Aug 14 (45 days after Q2 end)
-    - cron: '0 0 14 11 *'  # Nov 14 (45 days after Q3 end)
-    - cron: '0 0 14 2 *'   # Feb 14 (45 days after Q4 end)
+    - cron: '0 0 15 5 *'  # May 15 (45 days after Q1 end)
+    - cron: '0 0 14 8 *'  # Aug 14 (45 days after Q2 end)
+    - cron: '0 0 14 11 *' # Nov 14 (45 days after Q3 end)
+    - cron: '0 0 14 2 *'  # Feb 14 (45 days after Q4 end)
   workflow_dispatch:
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           persist-credentials: true
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -29,8 +28,9 @@ jobs:
         run: node scripts/refresh-fry9c.cjs
       - name: Commit and push changes
         run: |
-          git config user.name 'github-actions'
-          git config user.email 'github-actions@github.com'
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add static/data
-          git commit -m "Update FRY9C data" || echo "No changes"
-          git push
+          git commit -m "Update FRY9C data" || true
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin HEAD:${{ github.ref }}
