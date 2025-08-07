@@ -1,8 +1,6 @@
 <script lang="ts">
   import '../app.css';
   import favicon from '$lib/assets/favicon.svg';
-  import Nav from '$lib/components/Nav.svelte';
-  export let data: any;
 </script>
 
 <svelte:head>
@@ -12,5 +10,4 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
 </svelte:head>
 
-<Nav />
 <slot />
