@@ -241,16 +241,14 @@
   </div>
 
   <div class="mb-4 flex flex-wrap gap-2">
-    {#each selectedMetrics as m}
+    {#each selectedMetrics.filter((m) => !defaultMetrics.includes(m)) as m}
       <span
         class="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center"
       >
         {m}
-        {#if !defaultMetrics.includes(m)}
-          <button class="ml-1 text-red-500" on:click={() => removeMetric(m)}
-            >×</button
-          >
-        {/if}
+        <button class="ml-1 text-red-500" on:click={() => removeMetric(m)}
+          >×</button
+        >
       </span>
     {/each}
   </div>
