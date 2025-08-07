@@ -159,7 +159,7 @@
 <div class="p-6 bg-white rounded-lg shadow-md">
   <h1 class="text-xl font-semibold mb-4">Input</h1>
   <div class="overflow-x-auto mb-4">
-    <table class="min-w-full border border-gray-300">
+    <table class="min-w-full w-max border border-gray-300">
       <thead class="bg-gray-100">
         <tr>
           <th class="px-2 py-1 border-b">Metric</th>
@@ -182,7 +182,7 @@
               <td class="px-2 py-1 align-top">
                 <input
                   type="number"
-                  class="w-full border rounded px-1 py-0.5 {currVal !== baseVal
+                  class="min-w-[6rem] w-full border rounded px-1 py-0.5 {currVal !== baseVal
                     ? 'bg-yellow-50 border-yellow-300'
                     : ''}"
                   value={currVal}
