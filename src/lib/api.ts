@@ -25,7 +25,7 @@ export const baseScenario: Table = [
     subRedemption: 0,
     at1Issue: 0,
     at1Redm: 0,
-    period: '24Q4'
+    period: '4Q24'
   },
   {
     sharesStart: 398.0,
@@ -49,7 +49,7 @@ export const baseScenario: Table = [
     subRedemption: 0,
     at1Issue: 0,
     at1Redm: 0,
-    period: '25Q1'
+    period: '1Q25'
   },
   {
     sharesStart: 398.0,
@@ -73,7 +73,7 @@ export const baseScenario: Table = [
     subRedemption: 0,
     at1Issue: 0,
     at1Redm: 0,
-    period: '25Q2'
+    period: '2Q25'
   }
 ];
 
