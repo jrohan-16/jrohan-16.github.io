@@ -15,7 +15,7 @@
  *    time of writing, a URL of the form shown below will return a CSV file:
  *
  *      https://www.ffiec.gov/npw/FinancialReport/ReturnFinancialReportCSV?
- *          dt=20250630&id=1069778&rpt=FRY9C
+ *          rpt=FRY9C&id=1069778&dt=20250331
  *
  *    Where:
  *      dt  – the quarter end date in YYYYMMDD format
@@ -49,40 +49,6 @@ const RSSD_IDS = [
     name: 'JPMorgan Chase & Co.'
   }
 ];
-48
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-;
 
 // Map our internal field names to FR Y‑9C variable codes.  See the MDRM or
 // Chicago Fed documentation for a comprehensive list of variable codes.  These
@@ -114,19 +80,33 @@ const BASE_URL =
 function getQuarterEndDates(numQuarters = 4) {
   const dates = [];
   const today = new Date();
+  const MS_PER_DAY = 24 * 60 * 60 * 1000;
+  const SWITCH_DELAY_DAYS = 44;
   let year = today.getUTCFullYear();
   let quarter = Math.floor((today.getUTCMonth()) / 3) + 1;
-  // Use the last completed quarter
-  if (today.getUTCMonth() % 3 !== 2 || today.getUTCDate() < 15) {
+
+  // Determine the most recent quarter end
+  let quarterEnd = new Date(Date.UTC(year, quarter * 3, 0));
+  if (today < quarterEnd) {
     quarter--;
     if (quarter < 1) {
       quarter = 4;
       year -= 1;
     }
+    quarterEnd = new Date(Date.UTC(year, quarter * 3, 0));
   }
+
+  // Only switch to the new quarter once 44 days have passed
+  if (today - quarterEnd < SWITCH_DELAY_DAYS * MS_PER_DAY) {
+    quarter--;
+    if (quarter < 1) {
+      quarter = 4;
+      year--;
+    }
+  }
+
   for (let i = 0; i < numQuarters; i++) {
-    const month = quarter * 3; // 3, 6, 9, 12
-    const endDate = new Date(Date.UTC(year, month, 0)); // last day of the month
+    const endDate = new Date(Date.UTC(year, quarter * 3, 0));
     const y = endDate.getUTCFullYear();
     const m = String(endDate.getUTCMonth() + 1).padStart(2, '0');
     const d = String(endDate.getUTCDate()).padStart(2, '0');
@@ -149,8 +129,8 @@ function getQuarterEndDates(numQuarters = 4) {
  */
 async function fetchQuarterData(rssdId, quarterEnd) {
   const url = new URL(BASE_URL);
-  url.searchParams.set('id', rssdId);
   url.searchParams.set('rpt', 'FRY9C');
+  url.searchParams.set('id', rssdId);
   url.searchParams.set('dt', quarterEnd);
   const res = await fetch(url.toString());
   if (!res.ok) {

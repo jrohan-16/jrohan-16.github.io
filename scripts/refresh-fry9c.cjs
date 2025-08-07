@@ -15,7 +15,7 @@
  *    time of writing, a URL of the form shown below will return a CSV file:
  *
  *      https://www.ffiec.gov/npw/FinancialReport/ReturnFinancialReportCSV?
- *          dt=20250630&id=1069778&rpt=FRY9C
+ *          rpt=FRY9C&id=1069778&dt=20250331
  *
  *    Where:
  *      dt  – the quarter end date in YYYYMMDD format
@@ -131,8 +131,8 @@ function getQuarterEndDates(numQuarters = 4) {
  */
 async function fetchQuarterData(rssdId, quarterEnd) {
   const url = new URL(BASE_URL);
-  url.searchParams.set('id', rssdId);
   url.searchParams.set('rpt', 'FRY9C');
+  url.searchParams.set('id', rssdId);
   url.searchParams.set('dt', quarterEnd);
   const res = await fetch(url.toString());
   if (!res.ok) {
