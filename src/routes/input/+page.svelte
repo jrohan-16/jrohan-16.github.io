@@ -46,6 +46,20 @@
     columns = cols;
   }
 
+  function handleInput(row: PeriodRow, key: keyof PeriodRow, e: Event) {
+    const target = e.target as HTMLInputElement;
+    const value = parseFloat(target.value);
+    if (key === 'provision') {
+      const preProvision = row.preTaxIncome + row.provision;
+      row.provision = value;
+      row.preTaxIncome = preProvision - value;
+    } else {
+      (row as any)[key] = value;
+    }
+    scenario = [...scenario];
+    updateResults();
+  }
+
   function nextPeriodLabel(current: string) {
     const match = current.match(/(\d{2})Q(\d)/);
     if (!match) return current;
@@ -88,7 +102,13 @@
             <td class="px-2 py-1">{row.period}</td>
             {#each editableFields as f}
               <td class="px-2 py-1">
-                <input type="number" class="w-full border rounded px-1 py-0.5" bind:value={(row as any)[f.key]} step="0.001" on:input={updateResults} />
+                <input
+                  type="number"
+                  class="w-full border rounded px-1 py-0.5"
+                  value={(row as any)[f.key]}
+                  step="0.001"
+                  on:input={(e) => handleInput(row, f.key, e)}
+                />
               </td>
             {/each}
           </tr>
