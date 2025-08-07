@@ -213,7 +213,9 @@ async function main() {
     // statically by SvelteKit/GitHub Pages.  The `static` folder already exists
     // in this repo and is copied verbatim to the build output.
     const outDir = 'static/data';
-    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
+    if (!fs.existsSync(outDir)) {
+    fs.mkdirSync(outDir, { recursive: true });
+  }
     const outPath = `${outDir}/${inst.slug}.json`;
     fs.writeFileSync(outPath, JSON.stringify(scenario, null, 2));
     console.log(`Wrote ${scenario.length} periods to ${outPath}`);
