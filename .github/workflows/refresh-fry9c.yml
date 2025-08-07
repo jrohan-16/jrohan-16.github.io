@@ -13,7 +13,8 @@ on:
 
 jobs:
   refresh:
-    runs-on: ubuntu-latest
+     runs-on: ubuntu-latest
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -27,6 +28,13 @@ jobs:
       - name: Run refresh script
         run: node scripts/refresh-fry9c.cjs
       - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add static/data
+          git commit -m "Update FRY9C data" || true
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin HEAD:${{ github.ref }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
