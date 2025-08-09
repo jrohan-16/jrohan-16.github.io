@@ -1,13 +1,16 @@
 <script lang="ts">
+  export let title = 'Delta';
   export let columns: string[];
   export let rows: string[];
   export let values: number[][];
   function fmt(n: number) {
     if (n === null || n === undefined) return '';
-    return Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(n);
+    const abs = Math.abs(n);
+    return (n >= 0 ? '+' : '-') + Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(abs);
   }
 </script>
 
+<h3 class="font-semibold mb-2">{title}</h3>
 <table class="min-w-full border text-sm">
   <thead>
     <tr>
