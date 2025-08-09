@@ -1,43 +1,44 @@
-# Capital Forecast Dashboard
+# Capital Forecast Dashboard (v3.0.1)
 
-This repository implements a TypeScript-based capital forecasting engine and a SvelteKit application for exploring scenario results.
+- Select JPM or PNC.
+- Load real data JSON from `static/data`.
+- Edit actuals live to build a hypothetical forecast.
+- Compare and export.
 
-## Getting started
-
-Install dependencies and start the development server:
+## Quick start
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Build and deploy
-
-To build the static site, run:
-
+Build for GitHub Pages:
 ```bash
 npm run build
 ```
 
-The output will be generated in the `docs` directory. A GitHub Actions workflow automatically builds and deploys the site to GitHub Pages whenever changes are pushed to the `main` branch.
+## Data
 
-## Core engine
+All values are **$ millions**. `pretax_income` is Y‑9C **HI item 8.c** (already after provision). Do **not** subtract provision again in the model.
 
-The capital forecasting logic is implemented in TypeScript in `src/lib/engine.ts`. A simple API wrapper in `src/lib/api.ts` exposes a `runModel()` function that calls the engine with a base scenario and returns table data and schema for the front-end.
+Generate JSONs from FR Y‑9C:
+```bash
+# JPM 2024
+FFIEC_BANK_SLUG=jpm FFIEC_BANK_NAME='JPMorgan Chase' FFIEC_RSSD=1039502 FFIEC_START_Q=2024-Q1 FFIEC_END_Q=2024-Q4 npm run ffiec:pull
+
+# PNC 2024
+FFIEC_BANK_SLUG=pnc FFIEC_BANK_NAME='PNC Financial Services' FFIEC_RSSD=1069778 FFIEC_START_Q=2024-Q1 FFIEC_END_Q=2024-Q4 npm run ffiec:pull
+```
+
+The puller writes `static/data/<slug>.json`. It converts YTD fields to quarterly flows and seeds each quarter's **start CET1** from the prior quarter's **end CET1** where available.
 
 
-## Features
+## Pre-pull 1Q24–1Q25
 
-- Global navigation bar visible on all pages for easy access to Dashboard, Input, Compare and Export views.
-- Scenario tables pivoted so that financial metrics are rows and quarters are columns for better readability.
-- Interactive Input page allowing you to adjust key assumptions (pre-tax income, provision, tax rate) and see immediate results.
-- Export functionality to download scenario results as a CSV.
+Pull JPM + PNC data for **2024‑Q1 → 2025‑Q1** into `static/data/`:
 
-## Data refresh workflow
+```bash
+npm run prepull:1q24-1q25
+```
 
-The `refresh-fry9c.js` script and its GitHub Actions workflow keep the quarterly FR Y‑9C data up to date.
-
-- **Automatic updates:** A workflow defined at `.github/workflows/refresh-fry9c.yml` runs 45 days after each quarter‑end (May 15, August 14, November 14 and February 14). It fetches the latest FR Y‑9C data for the banks defined in `scripts/refresh-fry9c.js` (currently PNC and JPM) and writes JSON files to `static/data/`. These files are served by the site and used by the model.
-- **Manual refresh:** To refresh the data outside of the scheduled run, go to the **Actions** tab on GitHub, select the **"Refresh FRY9C Data"** workflow and click **"Run workflow"**. The workflow will run the same script and commit any updated data files.
-- **Adding a bank:** To add another institution, edit the `RSSD_IDS` array in `scripts/refresh-fry9c.js` with the bank’s RSSD ID, slug and name. After committing that change, trigger a manual refresh or wait for the next scheduled run.
-- **Changing the schedule:** Modify the cron entries in `.github/workflows/refresh-fry9c.yml` if you need a different cadence for data updates.
+This calls the FFIEC CSV endpoints per quarter and writes normalized JSONs.
