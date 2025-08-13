@@ -1,0 +1,30 @@
+name: Refresh FR Y-9C Data
+
+on:
+  schedule:
+    - cron: "0 9 14 2 *"   # Feb 14
+    - cron: "0 9 14 5 *"   # May 14
+    - cron: "0 9 14 8 *"   # Aug 14
+    - cron: "0 9 14 11 *"  # Nov 14
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Pre-pull JPM + PNC (1Q24–1Q25)
+        run: npm run prepull:1q24-1q25
+      - name: Commit updated data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(data): refresh FR Y-9C JSON"
+          file_pattern: static/data/*.json
