@@ -11,7 +11,7 @@
 
   import { onDestroy } from 'svelte';
 
-  let slug: 'jpm'|'pnc' = 'jpm';
+  let slug: 'jpm' | 'pnc' = 'jpm';
   const unsubscribe = selectedBank.subscribe((value) => {
     slug = value;
   });
@@ -85,14 +85,14 @@
 </div>
 
 {#if base && working}
-  <EditableGrid {bank}={working} onChange={onChange} class="mb-4" />
+  <EditableGrid bank={working} onChange={onChange} class="mb-4" />
   <div class="grid md:grid-cols-2 gap-6 mt-6">
     <div>
       <h3 class="font-semibold mb-2">Scenario</h3>
-      <DataTable {columns}={pWork.columns} {rows}={pWork.rows} {values}={pWork.values} />
+      <DataTable columns={pWork.columns} rows={pWork.rows} values={pWork.values} />
     </div>
     <div>
-      <DeltaTable title="Delta vs. Actual" {columns}={delta.columns} {rows}={delta.rows} {values}={delta.values} />
+      <DeltaTable title="Delta vs. Actual" columns={delta.columns} rows={delta.rows} values={delta.values} />
     </div>
   </div>
 {:else}
