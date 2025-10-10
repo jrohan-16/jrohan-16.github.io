@@ -6,23 +6,25 @@
   export let values: number[][];
 </script>
 
-<table class="table-standard">
-  <thead>
-    <tr>
-      <th class="table-label">Metric</th>
-      {#each columns as c}
-        <th class="table-number">{c}</th>
-      {/each}
-    </tr>
-  </thead>
-  <tbody>
-    {#each rows as r, i}
+<div class="table-container">
+  <table class="table-standard">
+    <thead>
       <tr>
-        <td class="table-label">{r}</td>
-        {#each values[i] as v}
-          <td class="table-number">{formatMillions(v)}</td>
+        <th class="table-label">Metric</th>
+        {#each columns as c}
+          <th class="table-number">{c}</th>
         {/each}
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each rows as r, i}
+        <tr>
+          <td class="table-label">{r}</td>
+          {#each values[i] as v}
+            <td class="table-number">{formatMillions(v)}</td>
+          {/each}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>

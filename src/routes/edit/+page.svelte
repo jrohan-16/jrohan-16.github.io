@@ -77,22 +77,38 @@
   }
 </script>
 
-<h1 class="text-xl font-semibold mb-3">Edit Actuals</h1>
-<p class="text-sm mb-4">Edit quarterly values (in $ millions) to see the scenario and deltas vs. actual.</p>
-<div class="flex gap-2 mb-3">
-  <button class="border rounded px-2 py-1" on:click={undo} disabled={!undoable?.canUndo()}>Undo</button>
-  <button class="border rounded px-2 py-1" on:click={redo} disabled={!undoable?.canRedo()}>Redo</button>
+<h1 class="mb-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Edit Actuals</h1>
+<p class="mb-6 max-w-3xl text-sm text-slate-600 sm:text-base">
+  Edit quarterly values (in $ millions) to see the refreshed scenario projections and how they differ from actuals.
+</p>
+<div class="mb-4 flex flex-wrap gap-2">
+  <button
+    class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400 disabled:shadow-none"
+    on:click={undo}
+    disabled={!undoable?.canUndo()}
+  >
+    Undo
+  </button>
+  <button
+    class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400 disabled:shadow-none"
+    on:click={redo}
+    disabled={!undoable?.canRedo()}
+  >
+    Redo
+  </button>
 </div>
 
 {#if base && working}
-  <EditableGrid bank={working} onChange={onChange} class="mb-4" />
-  <div class="grid md:grid-cols-2 gap-6 mt-6">
-    <div>
-      <h3 class="font-semibold mb-2">Scenario</h3>
-      <DataTable columns={pWork.columns} rows={pWork.rows} values={pWork.values} />
-    </div>
-    <div>
-      <DeltaTable title="Delta vs. Actual" columns={delta.columns} rows={delta.rows} values={delta.values} />
+  <div class="space-y-8">
+    <EditableGrid bank={working} onChange={onChange} />
+    <div class="grid gap-8 md:grid-cols-2">
+      <div>
+        <h3 class="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Scenario</h3>
+        <DataTable columns={pWork.columns} rows={pWork.rows} values={pWork.values} />
+      </div>
+      <div>
+        <DeltaTable title="Delta vs. Actual" columns={delta.columns} rows={delta.rows} values={delta.values} />
+      </div>
     </div>
   </div>
 {:else}
