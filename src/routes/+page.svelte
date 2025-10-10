@@ -7,7 +7,7 @@
 
   import { onDestroy } from 'svelte';
 
-  let slug: 'jpm'|'pnc' = 'jpm';
+  let slug: 'jpm' | 'pnc' = 'jpm';
   let pivot: any = null;
   let refreshToken = 0;
   let lastSlug: typeof slug | null = null;
@@ -34,7 +34,7 @@
 
 <h1 class="text-xl font-semibold mb-3">Dashboard</h1>
 {#if pivot}
-  <DataTable {columns}={pivot.columns} {rows}={pivot.rows} {values}={pivot.values} />
+  <DataTable columns={pivot.columns} rows={pivot.rows} values={pivot.values} />
 {:else}
   <p>Loading…</p>
 {/if}

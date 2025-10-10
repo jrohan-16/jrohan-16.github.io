@@ -25,14 +25,14 @@
 <div class="grid md:grid-cols-3 gap-6">
   <div>
     <h3 class="font-semibold mb-2">JPM</h3>
-    {#if pl}<DataTable {columns}={pl.columns} {rows}={pl.rows} {values}={pl.values} />{/if}
+    {#if pl}<DataTable columns={pl.columns} rows={pl.rows} values={pl.values} />{/if}
   </div>
   <div>
     <h3 class="font-semibold mb-2">PNC</h3>
-    {#if pr}<DataTable {columns}={pr.columns} {rows}={pr.rows} {values}={pr.values} />{/if}
+    {#if pr}<DataTable columns={pr.columns} rows={pr.rows} values={pr.values} />{/if}
   </div>
   <div>
     <h3 class="font-semibold mb-2">Delta (JPM - PNC)</h3>
-    {#if d}<DataTable {columns}={d.columns} {rows}={d.rows} {values}={d.values} />{/if}
+    {#if d}<DataTable columns={d.columns} rows={d.rows} values={d.values} />{/if}
   </div>
 </div>
