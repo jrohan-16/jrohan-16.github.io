@@ -9,8 +9,14 @@
   import type { BankData } from '$lib/types';
   import { createUndoStack } from '$lib/undo';
 
+  import { onDestroy } from 'svelte';
+
   let slug: 'jpm'|'pnc' = 'jpm';
-  $: selectedBank.subscribe((v)=> slug = v);
+  const unsubscribe = selectedBank.subscribe((value) => {
+    slug = value;
+  });
+
+  onDestroy(unsubscribe);
 
   let base: BankData | null = null;
   let working: BankData | null = null;
@@ -19,8 +25,24 @@
   let delta: any = null;
   let undoable: ReturnType<typeof createUndoStack<BankData>> | null = null;
 
-  async function load() {
-    base = await loadBank(slug);
+  let loadToken = 0;
+  let lastSlug: typeof slug | null = null;
+
+  function resetState() {
+    base = null;
+    working = null;
+    pBase = null;
+    pWork = null;
+    delta = null;
+    undoable = null;
+  }
+
+  async function load(currentSlug: typeof slug) {
+    const token = ++loadToken;
+    const loaded = await loadBank(currentSlug);
+    if (token !== loadToken) return;
+
+    base = loaded;
     working = structuredClone(base);
     pBase = to_pivot(runModel({ bank: base }).scenario);
     pWork = to_pivot(runModel({ bank: working }).scenario);
@@ -48,7 +70,11 @@
     delta = pivot_delta(pWork, pBase);
   }
 
-  $: load();
+  $: if (slug && slug !== lastSlug) {
+    lastSlug = slug;
+    resetState();
+    load(slug);
+  }
 </script>
 
 <h1 class="text-xl font-semibold mb-3">Edit Actuals</h1>

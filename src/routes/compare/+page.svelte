@@ -4,15 +4,21 @@
   import { to_pivot, pivot_delta } from '$lib/engine';
   import DataTable from '$components/DataTable.svelte';
 
+  import { onMount } from 'svelte';
+
   let left = null, right = null, pl = null, pr = null, d = null;
 
   async function refresh() {
+    pl = pr = d = null;
     [left, right] = await Promise.all([loadBank('jpm'), loadBank('pnc')]);
     pl = to_pivot(runModel({ bank: left }).scenario);
     pr = to_pivot(runModel({ bank: right }).scenario);
     d = pivot_delta(pl, pr);
   }
-  $: refresh();
+
+  onMount(() => {
+    refresh();
+  });
 </script>
 
 <h1 class="text-xl font-semibold mb-3">Compare</h1>

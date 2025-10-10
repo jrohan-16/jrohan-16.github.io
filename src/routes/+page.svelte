@@ -5,15 +5,31 @@
   import { to_pivot } from '$lib/engine';
   import DataTable from '$components/DataTable.svelte';
 
-  let slug: 'jpm'|'pnc' = 'jpm';
-  $: selectedBank.subscribe((v)=> slug = v);
-  let pivot: any = null;
+  import { onDestroy } from 'svelte';
 
-  async function refresh() {
-    const bank = await loadBank(slug);
+  let slug: 'jpm'|'pnc' = 'jpm';
+  let pivot: any = null;
+  let refreshToken = 0;
+  let lastSlug: typeof slug | null = null;
+
+  const unsubscribe = selectedBank.subscribe((value) => {
+    slug = value;
+  });
+
+  onDestroy(unsubscribe);
+
+  async function refresh(currentSlug: typeof slug) {
+    const token = ++refreshToken;
+    const bank = await loadBank(currentSlug);
+    if (token !== refreshToken) return;
     pivot = to_pivot(runModel({ bank }).scenario);
   }
-  $: refresh();
+
+  $: if (slug && slug !== lastSlug) {
+    lastSlug = slug;
+    pivot = null;
+    refresh(slug);
+  }
 </script>
 
 <h1 class="text-xl font-semibold mb-3">Dashboard</h1>
