@@ -1,11 +1,9 @@
 <script lang="ts">
+  import { formatMillions } from '$lib/format';
+
   export let columns: string[];
   export let rows: string[];
   export let values: number[][];
-  function fmt(n: number) {
-    if (n === null || n === undefined) return '';
-    return Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(n);
-  }
 </script>
 
 <table class="min-w-full border text-sm">
@@ -22,7 +20,7 @@
       <tr>
         <td class="border p-2">{r}</td>
         {#each values[i] as v}
-          <td class="border p-2 text-right">{fmt(v)}</td>
+          <td class="border p-2 text-right">{formatMillions(v)}</td>
         {/each}
       </tr>
     {/each}
