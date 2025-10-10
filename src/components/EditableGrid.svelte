@@ -31,24 +31,30 @@
   }
 </script>
 
-<table class="min-w-full border text-sm">
+<table class="table-standard">
   <thead>
     <tr>
-      <th class="border p-2 text-left">Quarter</th>
+      <th class="table-label">Quarter</th>
       {#each fields as [k,label]}
-        <th class="border p-2 text-right">{label}</th>
+        <th class="table-number">{label}</th>
       {/each}
     </tr>
   </thead>
   <tbody>
     {#each Object.keys(bank.quarters).sort() as q}
       <tr>
-        <td class="border p-1">{q}</td>
+        <td class="table-label">{q}</td>
         {#each fields as [k]}
-          <td class="border p-1">
-            <input class="w-full text-right outline-none" type="number" step="0.01"
-                   value={getValue(q, k)}
-                   on:input={(event) => handleInput(q, k, event)} />
+          <td>
+            <input
+              class="table-input table-number"
+              type="number"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="-123.45"
+              value={getValue(q, k)}
+              on:input={(event) => handleInput(q, k, event)}
+            />
           </td>
         {/each}
       </tr>
