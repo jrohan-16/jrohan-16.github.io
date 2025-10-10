@@ -36,9 +36,18 @@
   });
 </script>
 
-<h1 class="text-xl font-semibold mb-3">Export</h1>
+<h1 class="mb-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Export</h1>
+<p class="mb-6 max-w-2xl text-sm text-slate-600 sm:text-base">
+  Download the latest scenario results as a CSV so you can share them or run deeper analysis offline.
+</p>
 {#if url}
-  <a class="underline" href={url} download="scenario.csv">Download CSV</a>
+  <a
+    class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-900/30 transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400"
+    href={url}
+    download="scenario.csv"
+  >
+    Download CSV
+  </a>
 {:else}
-  <p>Preparing…</p>
+  <p class="text-sm text-slate-500">Preparing…</p>
 {/if}

@@ -32,7 +32,7 @@
   }
 </script>
 
-<h1 class="text-xl font-semibold mb-3">Dashboard</h1>
+<h1 class="mb-6 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Dashboard</h1>
 {#if pivot}
   <DataTable columns={pivot.columns} rows={pivot.rows} values={pivot.values} />
 {:else}

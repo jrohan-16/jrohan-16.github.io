@@ -31,33 +31,35 @@
   }
 </script>
 
-<table class="table-standard">
-  <thead>
-    <tr>
-      <th class="table-label">Quarter</th>
-      {#each fields as [k,label]}
-        <th class="table-number">{label}</th>
-      {/each}
-    </tr>
-  </thead>
-  <tbody>
-    {#each Object.keys(bank.quarters).sort() as q}
+<div class="table-container">
+  <table class="table-standard">
+    <thead>
       <tr>
-        <td class="table-label">{q}</td>
-        {#each fields as [k]}
-          <td>
-            <input
-              class="table-input table-number"
-              type="number"
-              step="0.01"
-              inputmode="decimal"
-              placeholder="-123.45"
-              value={getValue(q, k)}
-              on:input={(event) => handleInput(q, k, event)}
-            />
-          </td>
+        <th class="table-label">Quarter</th>
+        {#each fields as [k, label]}
+          <th class="table-number">{label}</th>
         {/each}
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each Object.keys(bank.quarters).sort() as q}
+        <tr>
+          <td class="table-label">{q}</td>
+          {#each fields as [k]}
+            <td>
+              <input
+                class="table-input table-number"
+                type="number"
+                step="0.01"
+                inputmode="decimal"
+                placeholder="-123.45"
+                value={getValue(q, k)}
+                on:input={(event) => handleInput(q, k, event)}
+              />
+            </td>
+          {/each}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
