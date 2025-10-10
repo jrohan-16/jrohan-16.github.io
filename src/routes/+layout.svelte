@@ -1,17 +1,56 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import BankSelector from '$components/BankSelector.svelte';
+
+  const navLinks = [
+    { href: '/', label: 'Dashboard' },
+    { href: '/edit', label: 'Edit' },
+    { href: '/compare', label: 'Compare' },
+    { href: '/export', label: 'Export' }
+  ] as const;
 </script>
-<div class="p-4 max-w-6xl mx-auto">
-  <header class="flex items-center justify-between mb-6">
-    <nav class="flex gap-3">
-      <a href="/">Dashboard</a>
-      <a href="/edit">Edit</a>
-      <a href="/compare">Compare</a>
-      <a href="/export">Export</a>
-    </nav>
-    <BankSelector />
+
+<div class="min-h-screen bg-slate-100 text-slate-900">
+  <header class="bg-slate-900 text-slate-100 shadow-sm">
+    <div
+      class="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-6 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div class="flex flex-wrap items-center gap-3 text-left">
+        <div
+          class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 text-lg font-semibold tracking-tight"
+        >
+          CF
+        </div>
+        <div class="min-w-0">
+          <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">Capital Forecast</p>
+          <p class="text-lg font-semibold leading-tight">Rate Card Dashboard</p>
+        </div>
+      </div>
+      <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-6">
+        <nav class="flex flex-wrap items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.3em]">
+          {#each navLinks as item}
+            <a
+              href={item.href}
+              aria-current={$page.url.pathname === item.href ? 'page' : undefined}
+              class={`rounded-full px-4 py-2 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 ${
+                $page.url.pathname === item.href
+                  ? 'bg-slate-100 text-slate-900 shadow-sm'
+                  : 'text-slate-200 hover:bg-slate-800/80 hover:text-white focus-visible:bg-slate-800/70 focus-visible:text-white'
+              }`}
+            >
+              {item.label}
+            </a>
+          {/each}
+        </nav>
+        <div class="sm:self-stretch">
+          <BankSelector />
+        </div>
+      </div>
+    </div>
   </header>
-  <slot />
+  <main class="mx-auto w-full max-w-6xl px-4 py-6">
+    <slot />
+  </main>
 </div>
 
 <style>
