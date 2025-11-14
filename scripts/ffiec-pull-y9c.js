@@ -52,9 +52,26 @@ function ytdToFlow(raw, quarters, q, code) {
 
 async function main() {
   const raw = {};
-  for (const q of QUARTERS) raw[q] = parseCSV(await fetchCSV(RSSD, toDateString(q)));
+  // Fetch each quarter individually. If a fetch fails, log the error and
+  // assign an empty object so downstream calculations can continue.
+  for (const q of QUARTERS) {
+    try {
+      raw[q] = parseCSV(await fetchCSV(RSSD, toDateString(q)));
+    } catch (err) {
+      console.error(`failed to fetch data for ${q}: ${err}`);
+      raw[q] = {};
+    }
+  }
+  // Fetch the quarter preceding the first quarter in our range.  Some of the
+  // calculations in the loop below reference the previous quarter's values. If
+  // this fetch fails, we log the error and set the entry to an empty object.
   const prev = prevQuarter(QUARTERS[0]);
-  try { raw[prev] = parseCSV(await fetchCSV(RSSD, toDateString(prev))); } catch {}
+  try {
+    raw[prev] = parseCSV(await fetchCSV(RSSD, toDateString(prev)));
+  } catch (err) {
+    console.error(`failed to fetch data for previous quarter ${prev}: ${err}`);
+    raw[prev] = {};
+  }
 
   const out = {};
   for (const q of QUARTERS) {
