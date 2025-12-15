@@ -343,4 +343,8 @@
       padding: 0.65rem 0.85rem;
     }
   }
+
+#site-navigation {
+  display: none;
+}
 </style>
