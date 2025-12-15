@@ -10,8 +10,8 @@ const config = {
       $components: 'src/components',
       $lib: 'src/lib'
     },
-    trailingSlash: 'always'
-  }
+    
+  
 };
 
 export default config;
