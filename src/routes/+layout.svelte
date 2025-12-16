@@ -347,4 +347,12 @@
 #site-navigation {
   display: none;
 }
+header button[aria-controls="site-navigation"] {
+    display: none;
+}
+
+.min-w-0 p:first-child {
+    display: none;
+}
+
 </style>
