@@ -1,13 +1,12 @@
 <script lang="ts">
-  import { formatMillions } from '$lib/format';
-
-  export let columns: string[];
-  export let rows: string[];
-  export let values: number[][];
+import { formatMillions } from '$lib/format';
+export let columns: string[];
+export let rows: string[];
+export let values: number[][];
 </script>
 
-<div class="table-container">
-  <table class="table-standard">
+<div class="cf-table-wrap">
+  <table class="cf-table" aria-label="Scenario results">
     <thead>
       <tr>
         <th class="table-label">Metric</th>
